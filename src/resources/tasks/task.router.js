@@ -1,11 +1,12 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const Task = require('./task.model');
 const tasksService = require('./task.service');
 
 router
-  .route('/:boardId/tasks')
+  .route('/')
   .get(async (req, res) => {
-    const tasks = await tasksService.getAll();
+    const { boardId } = req.params;
+    const tasks = await tasksService.getTasksByBoard(boardId);
     res.json(tasks.map(Task.toResponse));
   })
   .post(async (req, res) => {
@@ -15,7 +16,7 @@ router
   });
 
 router
-  .route('/:boardId/tasks/:id')
+  .route('/:id')
   .get(async (req, res) => {
     const { id } = req.params;
     const task = await tasksService.getTask(id);
@@ -35,11 +36,9 @@ router
     }
   })
   .delete(async (req, res) => {
-    console.log('delete');
     const { id } = req.params;
     const isDelete = await tasksService.deleteTask(id);
     if (isDelete) {
-      console.log('delete');
       res.status(204).send();
     } else {
       res.status(404).send();

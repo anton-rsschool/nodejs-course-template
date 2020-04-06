@@ -6,6 +6,10 @@ const getAll = async () => {
   return tasks;
 };
 
+const getTasksByBoard = async boardId => {
+  return tasks.filter(item => item.boardId === boardId);
+};
+
 const getTask = async id => {
   const task = tasks.find(item => item.id === id);
   return task || false;
@@ -31,4 +35,11 @@ const deleteTask = async id => {
   return true;
 };
 
-module.exports = { getAll, getTask, createTask, updateTask, deleteTask };
+module.exports = {
+  getAll,
+  getTask,
+  createTask,
+  updateTask,
+  deleteTask,
+  getTasksByBoard
+};
